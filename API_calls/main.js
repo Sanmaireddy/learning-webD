@@ -20,3 +20,38 @@ function fetchRandDogImg() {
   //   });
 }
 $("#button").click(fetchRandDogImg);
+
+function convert(from, to, amount) {
+  var myHeaders = new Headers();
+  myHeaders.append("apikey", "hHVZrhps8bDdvhVxtPCZVOdJFLCowte1");
+
+  var requestOptions = {
+    method: "GET",
+    redirect: "follow",
+    headers: myHeaders,
+  };
+  console.log(from, to, amount);
+  fetch(
+    `https://api.apilayer.com/currency_data/convert?to=${to}&from=${from}&amount=${amount}`,
+    requestOptions
+  )
+    .then((response) => response.text())
+    .then((res) => {
+      var answer = document.getElementById("answer");
+      var res1 = JSON.parse(res);
+      answer.textContent = `Yay the converted value is ${res1.result}`;
+    })
+    .catch((error) => {
+      console.log("error", error);
+      var answer = document.getElementById("answer");
+      answer.textContent = `Sorry, The API calls limit might have reached`;
+    });
+}
+
+$("#currency-conv").submit(function (e) {
+  e.preventDefault();
+  var from = $("#from").val();
+  var to = $("#to").val();
+  var amount = $("#amount").val();
+  convert(from, to, amount);
+});
